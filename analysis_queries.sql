@@ -117,11 +117,16 @@ GROUP BY ProductID
 ORDER BY count(orderid);
 
 --Delivered orders by region--
-SELECT   Region,
-         count(locationid) AS [The number of successful deliveries per region]
-FROM     DimLocation
-GROUP BY Region
-ORDER BY count(locationid) DESC;
+
+SELECT   loc.Region,
+         COUNT(DISTINCT o.OrderID) AS [Delivered Orders]
+FROM     DimLocation AS loc
+         INNER JOIN
+         DimOrders AS o
+         ON o.LocationID = loc.LocationID
+WHERE    o.ShipDate IS NOT NULL
+GROUP BY loc.Region
+ORDER BY [Delivered Orders] DESC;
 
 
 GO
